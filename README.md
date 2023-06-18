@@ -2,40 +2,46 @@
 
 This code is a Python script that uses the NumPy and Matplotlib libraries to visualize a simple animation of a robotic arm. The script allows the user to interact with the animation by clicking on the plot window to change the target point for the arm to reach. The arm adjusts its angles (theta values) to move towards the target point.
 
-Dependencies
+## Dependencies
+
 NumPy: A library for numerical computing with Python.
 Matplotlib: A plotting library for creating static, animated, and interactive visualizations in Python.
 Make sure you have these libraries installed before running the script.
 
-Usage
+## Usage
+
 Import the necessary libraries:
-python
-Copy code
+
+```
 import numpy as np
 import sys
 import matplotlib
+```
+
 Set the appropriate backend for Matplotlib based on the operating system:
-python
-Copy code
+```
 if sys.platform == 'darwin':
     matplotlib.use("MacOSX")  # for macOS
 else:
     matplotlib.use("TkAgg")  # for UNIX/Windows
+```
+
 Import the required modules from Matplotlib and configure the plot:
-python
-Copy code
+```
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (7, 7)  # size of the window
 plt.ion()  # turn on interactive mode
 plt.style.use('dark_background')  # set the plot style
+```
+
 Define the initial target point and anchor point for the arm:
-python
-Copy code
+```
 target_point = np.array([-3.0, 0])
 anchor_point = np.array([0, 0])
+```
+
 Set up event handling functions for button press, key press, and window close events:
-python
-Copy code
+```
 def button_press_event(event):
     global target_point
     target_point = np.array([event.xdata, event.ydata])
@@ -49,16 +55,18 @@ def press(event):
 def on_close(event):
     global is_running
     is_running = False
+```
+
 Create the figure and connect the event handling functions to the corresponding events:
-python
-Copy code
+```
 fig, _ = plt.subplots()
 fig.canvas.mpl_connect('close_event', on_close)
 fig.canvas.mpl_connect('button_press_event', button_press_event)
 fig.canvas.mpl_connect('key_press_event', press)
+```
+
 Define helper functions for rotation matrices:
-python
-Copy code
+```
 def rotation(theta):
     c = np.cos(theta)
     s = np.sin(theta)
@@ -76,9 +84,10 @@ def d_rotation(theta):
         [c, -s]
     ])
     return R
+```
+
 Enter the main animation loop:
-python
-Copy code
+```
 while is_running:
     plt.clf()  # clear the plot
 
@@ -150,4 +159,6 @@ while is_running:
     # Draw the plot and pause for a short time
     plt.draw()
     plt.pause(1e-3)
+```
+
 Make sure to adjust any parameters or settings to suit your needs. You can modify the code and experiment with different configurations to understand how the robotic arm behaves.
