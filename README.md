@@ -4,13 +4,14 @@ This code is a Python script that uses the NumPy and Matplotlib libraries to vis
 
 ## Dependencies
 
-NumPy: A library for numerical computing with Python.
-Matplotlib: A plotting library for creating static, animated, and interactive visualizations in Python.
+- NumPy: A library for numerical computing with Python.
+- Matplotlib: A plotting library for creating static, animated, and interactive visualizations in Python.
+  
 Make sure you have these libraries installed before running the script.
 
 ## Usage
 
-Import the necessary libraries:
+1. Import the necessary libraries:
 
 ```
 import numpy as np
@@ -18,7 +19,7 @@ import sys
 import matplotlib
 ```
 
-Set the appropriate backend for Matplotlib based on the operating system:
+2. Set the appropriate backend for Matplotlib based on the operating system:
 ```
 if sys.platform == 'darwin':
     matplotlib.use("MacOSX")  # for macOS
@@ -26,7 +27,7 @@ else:
     matplotlib.use("TkAgg")  # for UNIX/Windows
 ```
 
-Import the required modules from Matplotlib and configure the plot:
+3. Import the required modules from Matplotlib and configure the plot:
 ```
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (7, 7)  # size of the window
@@ -34,13 +35,13 @@ plt.ion()  # turn on interactive mode
 plt.style.use('dark_background')  # set the plot style
 ```
 
-Define the initial target point and anchor point for the arm:
+4. Define the initial target point and anchor point for the arm:
 ```
 target_point = np.array([-3.0, 0])
 anchor_point = np.array([0, 0])
 ```
 
-Set up event handling functions for button press, key press, and window close events:
+5. Set up event handling functions for button press, key press, and window close events:
 ```
 def button_press_event(event):
     global target_point
@@ -57,7 +58,7 @@ def on_close(event):
     is_running = False
 ```
 
-Create the figure and connect the event handling functions to the corresponding events:
+6. Create the figure and connect the event handling functions to the corresponding events:
 ```
 fig, _ = plt.subplots()
 fig.canvas.mpl_connect('close_event', on_close)
@@ -65,7 +66,7 @@ fig.canvas.mpl_connect('button_press_event', button_press_event)
 fig.canvas.mpl_connect('key_press_event', press)
 ```
 
-Define helper functions for rotation matrices:
+7. Define helper functions for rotation matrices:
 ```
 def rotation(theta):
     c = np.cos(theta)
@@ -86,7 +87,7 @@ def d_rotation(theta):
     return R
 ```
 
-Enter the main animation loop:
+8. Enter the main animation loop:
 ```
 while is_running:
     plt.clf()  # clear the plot
