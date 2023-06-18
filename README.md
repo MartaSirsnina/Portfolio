@@ -1,4 +1,4 @@
-# Robot arm
+# Robot arm with three segments
 
 This code is a Python script that uses the NumPy and Matplotlib libraries to visualize a simple animation of a robotic arm. The script allows the user to interact with the animation by clicking on the plot window to change the target point for the arm to reach. The arm adjusts its angles (theta values) to move towards the target point.
 
