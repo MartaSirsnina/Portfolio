@@ -1,16 +1,17 @@
 import numpy as np
 import sys
 import matplotlib
+import matplotlib.pyplot as plt
 
 if sys.platform == 'darwin':
     matplotlib.use("MacOSX") # for mac
 else:
     matplotlib.use("TkAgg") # for unix/windows
+    
 
-import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (7, 7) # size of window
-plt.ion()
-plt.style.use('dark_background')
+plt.ion() # turns on interactive mode
+plt.style.use('dark_background') # sets plot style
 
 target_point = np.array([-3.0, 0])
 anchor_point = np.array([0, 0])
@@ -60,15 +61,18 @@ def d_rotation(theta):
 
 
 while is_running:
-    plt.clf()
-
+    plt.clf() # clears the plot
+    
+    # Calculates joint positions based on current theta values
     segment = np.array([0.0, 1.0]) * length_joint
     joints = []
-
+    
+    # Calculates rotation matrices
     R1 = rotation(theta_1)
     R2 = rotation(theta_2)
     R3 = rotation(theta_3)
 
+    # Calculates derivative of rotation matrices
     dR1 = d_rotation(theta_1)
     dR2 = d_rotation(theta_2)
     dR3 = d_rotation(theta_3)
@@ -86,6 +90,7 @@ while is_running:
 
     np_joints = np.array(joints)
 
+    # Calculates loss and gradients
     distance = np.sqrt(np.sum((point_3 - target_point) ** 2))
     loss = np.sum((point_3 - target_point) ** 2) + 0.1 * distance
 
@@ -94,6 +99,7 @@ while is_running:
     d_theta_2 = d_loss * (R1 @ dR2 @ (R2 @ segment))
     d_theta_3 = d_loss * (R1 @ R2 @ dR3 @ segment)
 
+    # Applies additional error terms
     additional_error_3 = np.sum(np.maximum(joints[3][1] - joints[1][1], 0) ** 2)
     additional_error_2 = np.sum(np.maximum(joints[2][1] - joints[1][1], 0) ** 2)
     additional_error_1 = np.sum(np.maximum(joints[1][1], 0) ** 2)
@@ -102,11 +108,13 @@ while is_running:
     d_theta_2 += 0.1 * additional_error_2 * (R1 @ dR2 @ segment)
     d_theta_1 += 0.1 * additional_error_1 * (dR1 @ segment)
 
+    # Updates theta values using gradient descent
     alpha = 1e-2
     theta_1 -= np.sum(d_theta_1 * alpha)
     theta_2 -= np.sum(d_theta_2 * alpha)
     theta_3 -= np.sum(d_theta_3 * alpha)
 
+    # Updates the plot with current state
     plt.title(
         f'theta_1: {round(np.rad2deg(theta_1))} '
         f'theta_2: {round(np.rad2deg(theta_2))} '
@@ -120,5 +128,7 @@ while is_running:
 
     plt.xlim(-5, 5)
     plt.ylim(0, 10)
+
+    # Draws the plot and pauses for a short time
     plt.draw()
     plt.pause(1e-3)
